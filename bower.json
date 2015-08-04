@@ -1,0 +1,9 @@
+{
+  "name": "gulp-start",
+  "version": "0.0.0",
+  "authors": [
+    "Tommy Ku <tommyku@eventxtra.com>"
+  ],
+  "dependencies": {
+  }
+}
