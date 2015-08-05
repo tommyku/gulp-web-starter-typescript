@@ -5,6 +5,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var coffee = require('gulp-coffee');
 var sass = require('gulp-sass');
 var jade = require('gulp-jade');
+var connect = require('gulp-connect');
 
 gulp.task('jade', function(){
   gulp.src(['src/jade/**/*.jade'])
@@ -53,7 +54,11 @@ gulp.task('publish', function(){
     .pipe(gulp.dest('./publish/bower_components'));
 });
 
-gulp.task('default', function(){
+gulp.task('serve', function() {
+  connect.server();
+});
+
+gulp.task('default', ['serve'], function(){
   gulp.watch("src/jade/**/*.jade", ['jade']);
   gulp.watch("src/sass/**/*.sass", ['styles']);
   gulp.watch("src/coffee/**/*.coffee", ['scripts']);
