@@ -6,6 +6,8 @@ var coffee = require('gulp-coffee');
 var sass = require('gulp-sass');
 var jade = require('gulp-jade');
 var connect = require('gulp-connect');
+var argv = require('yargs').argv;
+var gulpif = require('gulp-if').argv;
 
 gulp.task('jade', function(){
   gulp.src(['src/jade/**/*.jade'])
@@ -16,6 +18,7 @@ gulp.task('jade', function(){
     }}))
     .pipe(jade({pretty: true}))
     .pipe(gulp.dest('.'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
 gulp.task('styles', function(){
@@ -28,6 +31,7 @@ gulp.task('styles', function(){
     .pipe(sass({ indentedSyntax: true }))
     .pipe(autoprefixer('last 2 versions'))
     .pipe(gulp.dest('css/'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
 gulp.task('scripts', function(){
@@ -39,6 +43,7 @@ gulp.task('scripts', function(){
     }}))
     .pipe(coffee({bare: true}))
     .pipe(gulp.dest('js/'))
+    .pipe(gulpif(argv.live, connect.reload()))
 });
 
 gulp.task('publish', function(){
@@ -55,7 +60,7 @@ gulp.task('publish', function(){
 });
 
 gulp.task('serve', function() {
-  connect.server();
+  connect.server({livereload: argv.live});
 });
 
 gulp.task('default', ['serve'], function(){
