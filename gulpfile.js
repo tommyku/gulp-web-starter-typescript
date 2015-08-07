@@ -21,6 +21,19 @@ gulp.task('jade', function(){
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
+gulp.task('scss', function(){
+  gulp.src(['src/sass/**/*.scss'])
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(sass())
+    .pipe(autoprefixer('last 2 versions'))
+    .pipe(gulp.dest('css/'))
+    .pipe(gulpif(argv.live, connect.reload()))
+});
+
 gulp.task('styles', function(){
   gulp.src(['src/sass/**/*.sass'])
     .pipe(plumber({
@@ -66,5 +79,6 @@ gulp.task('serve', function() {
 gulp.task('default', ['serve'], function(){
   gulp.watch("src/jade/**/*.jade", ['jade']);
   gulp.watch("src/sass/**/*.sass", ['styles']);
+  gulp.watch("src/sass/**/*.scss", ['scss']);
   gulp.watch("src/coffee/**/*.coffee", ['scripts']);
 });
