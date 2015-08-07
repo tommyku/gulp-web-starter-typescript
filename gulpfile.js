@@ -7,7 +7,7 @@ var sass = require('gulp-sass');
 var jade = require('gulp-jade');
 var connect = require('gulp-connect');
 var argv = require('yargs').argv;
-var gulpif = require('gulp-if').argv;
+var gulpif = require('gulp-if');
 
 gulp.task('jade', function(){
   gulp.src(['src/jade/**/*.jade'])
