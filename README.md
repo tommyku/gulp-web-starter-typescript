@@ -12,6 +12,12 @@ $ npm install
 $ gulp
 ```
 
+# Livereload
+
+```bash
+$ gulp --live
+```
+
 Then start editing files inside `/src`.
 
 # Publish static content (only)
