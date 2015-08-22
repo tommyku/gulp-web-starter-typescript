@@ -72,6 +72,8 @@ gulp.task('publish', function(){
     .pipe(gulp.dest('./publish/bower_components'));
 });
 
+gulp.task('build', ['jade', 'styles', 'scss', 'scripts']);
+
 gulp.task('serve', function() {
   connect.server({livereload: argv.live});
 });
