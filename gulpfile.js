@@ -9,20 +9,20 @@ var connect = require('gulp-connect');
 var argv = require('yargs').argv;
 var gulpif = require('gulp-if');
 
-gulp.task('jade', function(){
-  gulp.src(['src/jade/**/*.jade'])
+gulp.task('html', function(){
+  gulp.src(['src/html/**/*.jade'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
         this.emit('end');
     }}))
     .pipe(jade({pretty: true}))
-    .pipe(gulp.dest('.'))
+    .pipe(gulp.dest('output'))
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('scss', function(){
-  gulp.src(['src/sass/**/*.scss'])
+gulp.task('css', function(){
+  gulp.src(['src/css/**/*.scss'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
@@ -30,12 +30,12 @@ gulp.task('scss', function(){
     }}))
     .pipe(sass())
     .pipe(autoprefixer('last 2 versions'))
-    .pipe(gulp.dest('css/'))
+    .pipe(gulp.dest('output/css/'))
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('styles', function(){
-  gulp.src(['src/sass/**/*.sass'])
+gulp.task('sass', function(){
+  gulp.src(['src/css/**/*.sass'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
@@ -43,44 +43,46 @@ gulp.task('styles', function(){
     }}))
     .pipe(sass({ indentedSyntax: true }))
     .pipe(autoprefixer('last 2 versions'))
-    .pipe(gulp.dest('css/'))
+    .pipe(gulp.dest('output/css/'))
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('scripts', function(){
-  return gulp.src('src/coffee/**/*.coffee')
+gulp.task('js', function(){
+  return gulp.src('src/js/**/*.coffee')
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
         this.emit('end');
     }}))
     .pipe(coffee({bare: true}))
-    .pipe(gulp.dest('js/'))
+    .pipe(gulp.dest('output/js/'))
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
 gulp.task('publish', function(){
   gulp.src(['index.html'], { base: '.' })
-    .pipe(gulp.dest('./publish'));
+    .pipe(gulp.dest('./output'));
   gulp.src(['css/**/*.css'], { base: 'css' })
-    .pipe(gulp.dest('./publish/css'));
+    .pipe(gulp.dest('./output/css'));
   gulp.src(['js/**/*.js'], { base: 'js' })
-    .pipe(gulp.dest('./publish/js'));
-  gulp.src(['res/**/*'], { base: 'res' })
-    .pipe(gulp.dest('./publish/res'));
+    .pipe(gulp.dest('./output/js'));
   gulp.src(['bower_components/**/*'], { base: 'bower_components' })
-    .pipe(gulp.dest('./publish/bower_components'));
+    .pipe(gulp.dest('./output/bower_components'));
 });
 
-gulp.task('build', ['jade', 'styles', 'scss', 'scripts']);
+gulp.task('build', ['html', 'sass', 'css', 'js']);
 
 gulp.task('serve', function() {
-  connect.server({livereload: argv.live});
+  connect.server({
+    root: 'output',
+    port: 3000,
+    livereload: argv.live
+  });
 });
 
-gulp.task('default', ['serve'], function(){
-  gulp.watch("src/jade/**/*.jade", ['jade']);
-  gulp.watch("src/sass/**/*.sass", ['styles']);
-  gulp.watch("src/sass/**/*.scss", ['scss']);
-  gulp.watch("src/coffee/**/*.coffee", ['scripts']);
+gulp.task('default', ['build', 'serve'], function(){
+  gulp.watch("src/html/**/*.jade", ['jade']);
+  gulp.watch("src/css/**/*.sass", ['sass']);
+  gulp.watch("src/css/**/*.scss", ['css']);
+  gulp.watch("src/js/**/*.coffee", ['js']);
 });
