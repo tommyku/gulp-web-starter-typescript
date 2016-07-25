@@ -81,7 +81,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('default', ['build', 'serve'], function(){
-  gulp.watch("src/html/**/*.jade", ['jade']);
+  gulp.watch("src/html/**/*.jade", ['html']);
   gulp.watch("src/css/**/*.sass", ['sass']);
   gulp.watch("src/css/**/*.scss", ['css']);
   gulp.watch("src/js/**/*.coffee", ['js']);
