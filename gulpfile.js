@@ -4,24 +4,26 @@ var gulp = require('gulp'),
 var autoprefixer = require('gulp-autoprefixer');
 var coffee = require('gulp-coffee');
 var sass = require('gulp-sass');
-var jade = require('gulp-jade');
+var pug = require('gulp-pug');
 var connect = require('gulp-connect');
 var argv = require('yargs').argv;
 var gulpif = require('gulp-if');
 
 gulp.task('html', function(){
-  gulp.src(['src/html/**/*.jade'])
+  gulp.src(['src/html/**/*.pug'])
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
         this.emit('end');
     }}))
-    .pipe(jade({pretty: true}))
+    .pipe(pug({pretty: true}))
     .pipe(gulp.dest('output'))
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('css', function(){
+gulp.task('css', ['scss', 'sass']);
+
+gulp.task('scss', function(){
   gulp.src(['src/css/**/*.scss'])
     .pipe(plumber({
       errorHandler: function (error) {
@@ -59,7 +61,7 @@ gulp.task('js', function(){
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('publish', function(){
+gulp.task('publish', ['buile'], function(){
   gulp.src(['index.html'], { base: '.' })
     .pipe(gulp.dest('./output'));
   gulp.src(['css/**/*.css'], { base: 'css' })
@@ -70,7 +72,7 @@ gulp.task('publish', function(){
     .pipe(gulp.dest('./output/bower_components'));
 });
 
-gulp.task('build', ['html', 'sass', 'css', 'js']);
+gulp.task('build', ['html', 'css', 'js']);
 
 gulp.task('serve', function() {
   connect.server({
@@ -81,8 +83,8 @@ gulp.task('serve', function() {
 });
 
 gulp.task('default', ['build', 'serve'], function(){
-  gulp.watch("src/html/**/*.jade", ['html']);
-  gulp.watch("src/css/**/*.sass", ['sass']);
+  gulp.watch("src/html/**/*.pug", ['html']);
+  gulp.watch("src/css/**/*.sass", ['css']);
   gulp.watch("src/css/**/*.scss", ['css']);
   gulp.watch("src/js/**/*.coffee", ['js']);
 });
