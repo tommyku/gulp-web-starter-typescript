@@ -61,7 +61,7 @@ gulp.task('js', function(){
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('publish', ['buile'], function(){
+gulp.task('publish', ['build'], function(){
   gulp.src(['index.html'], { base: '.' })
     .pipe(gulp.dest('./output'));
   gulp.src(['css/**/*.css'], { base: 'css' })
