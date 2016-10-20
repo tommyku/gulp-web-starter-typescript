@@ -1,5 +1,5 @@
-# gulp-web-starter
-Gulp tasks set up to build website with jade+sass+coffee
+# gulp-web-starter-typescript
+Gulp tasks set up to build website with jade+sass+typescript
 
 # Before install
 

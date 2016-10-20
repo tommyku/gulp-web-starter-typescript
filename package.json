@@ -4,9 +4,8 @@
   "description": "",
   "main": "gulpfile.js",
   "devDependencies": {
-    "gulp": "3.9.1",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "3.1.0",
-    "gulp-coffee": "^2.3.1",
     "gulp-connect": "^4.2.0",
     "gulp-if": "^2.0.1",
     "gulp-jade": "^1.0.1",
@@ -14,7 +13,9 @@
     "gulp-pug": "^3.0.4",
     "gulp-rename": "1.2.2",
     "gulp-sass": "^2.0.3",
+    "gulp-typescript": "^3.0.2",
     "npm-check-updates": "^2.7.2",
+    "typescript": "^2.0.3",
     "yargs": "^4.8.1"
   }
 }

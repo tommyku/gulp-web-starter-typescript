@@ -1,13 +1,14 @@
-var gulp = require('gulp'),
-    plumber = require('gulp-plumber'),
-    rename = require('gulp-rename');
+var gulp = require('gulp');
+var plumber = require('gulp-plumber');
+var rename = require('gulp-rename');
 var autoprefixer = require('gulp-autoprefixer');
-var coffee = require('gulp-coffee');
 var sass = require('gulp-sass');
 var pug = require('gulp-pug');
 var connect = require('gulp-connect');
 var argv = require('yargs').argv;
 var gulpif = require('gulp-if');
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
 
 gulp.task('html', function(){
   gulp.src(['src/html/**/*.pug'])
@@ -49,17 +50,19 @@ gulp.task('sass', function(){
     .pipe(gulpif(argv.live, connect.reload()))
 });
 
-gulp.task('js', function(){
-  return gulp.src('src/js/**/*.coffee')
-    .pipe(plumber({
-      errorHandler: function (error) {
-        console.log(error.message);
-        this.emit('end');
-    }}))
-    .pipe(coffee({bare: true}))
-    .pipe(gulp.dest('output/js/'))
-    .pipe(gulpif(argv.live, connect.reload()))
+gulp.task("js", function () {
+    return tsProject.src()
+        .pipe(tsProject())
+        .js.pipe(gulp.dest("output/js/"));
 });
+
+//gulp.task('js', function(){
+  //return tsProject().src()
+    //.pipe(tsProject())
+    //.js
+    //.pipe(gulp.dest('output/js/'))
+    //.pipe(gulpif(argv.live, connect.reload()))
+//});
 
 gulp.task('publish', ['build'], function(){
   gulp.src(['index.html'], { base: '.' })
@@ -86,5 +89,5 @@ gulp.task('default', ['build', 'serve'], function(){
   gulp.watch("src/html/**/*.pug", ['html']);
   gulp.watch("src/css/**/*.sass", ['css']);
   gulp.watch("src/css/**/*.scss", ['css']);
-  gulp.watch("src/js/**/*.coffee", ['js']);
+  gulp.watch("src/js/**/*.ts", ['js']);
 });
